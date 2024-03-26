@@ -137,10 +137,11 @@ class bitwarden(kp.Plugin):
                 return
             suggestions = []
             results = []
+            sanitized_input = urllib.parse.quote(user_input)
             try:
                 # get possible items
                 opener = kpnet.build_urllib_opener()
-                url = self.API_URL+"/list/object/items?search="+user_input
+                url = self.API_URL+"/list/object/items?search="+sanitized_input
                 with opener.open(url) as conn:
                     response = conn.read()
 
@@ -148,10 +149,10 @@ class bitwarden(kp.Plugin):
                 results = self._parse_api_response(response)
             except urllib.error.HTTPError as exc:
                 suggestions.append(self.create_error_item(
-                    label=user_input, short_desc=str(exc)))
+                    label=sanitized_input, short_desc=str(exc)))
             except Exception as exc:
                 suggestions.append(self.create_error_item(
-                    label=user_input, short_desc="Error: " + str(exc)))
+                    label=sanitized_input, short_desc="Error: " + str(exc)))
                 traceback.print_exc()
 
             # create a suggestion from api's response, if any
@@ -208,3 +209,4 @@ class bitwarden(kp.Plugin):
         except: 
             return json.loads("{'name':'error'}")
         return json_data_list
+    
