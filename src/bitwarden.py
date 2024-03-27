@@ -14,7 +14,6 @@ import os
 
 class bitwarden(kp.Plugin):
     API_URL = "http://localhost:8087"
-    BW_SESSION = os.environ.get('BW_SESSION')
 
     ACTION_COPY_USER = "copy_user"
     ACTION_COPY_PASSWORD = "copy_password"
@@ -68,11 +67,7 @@ class bitwarden(kp.Plugin):
         self.API_URL = settings.get_stripped(
             "bitwarden_api",
             section="bitwarden",
-            fallback="http://localhost:8087")
-        self.BW_SESSION = settings.get_stripped(
-            "bitwarden_session",
-            section="bitwarden",
-            fallback=os.environ.get('BW_SESSION'))        
+            fallback="http://localhost:8087")   
         #register actions
         actions = [
             self.create_action(
