@@ -68,6 +68,15 @@ class bitwarden(kp.Plugin):
             "bitwarden_api",
             section="bitwarden",
             fallback="http://localhost:8087")   
+
+        # Sync with server
+        try:
+            opener = kpnet.build_urllib_opener()
+            with opener.open(self.API_URL + "/sync", data=b'', timeout=30) as conn:
+                conn.read()
+        except:
+            pass  # Ignore any errors as requested
+
         #register actions
         actions = [
             self.create_action(
